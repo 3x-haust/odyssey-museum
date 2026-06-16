@@ -31,21 +31,15 @@ export const GlobalStyle = createGlobalStyle`
     font-family: ${({ theme }) => theme.font.sans};
     font-weight: 400;
     line-height: 1.5;
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
   }
 
-  /* custom cursor takes over on fine-pointer devices */
-  @media (hover: hover) and (pointer: fine) {
-    body { cursor: none; }
-    a, button, [data-cursor] { cursor: none; }
-  }
-
   a { color: inherit; text-decoration: none; }
-  button { font: inherit; color: inherit; background: none; border: none; }
+  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
   img, canvas, svg, iframe { display: block; max-width: 100%; }
 
   ::selection {
@@ -53,11 +47,7 @@ export const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.color.paper};
   }
 
-  /* Hide native scrollbar — Lenis drives the motion */
-  ::-webkit-scrollbar { width: 0; height: 0; }
-  html { scrollbar-width: none; }
-
-  h1, h2, h3, h4 { font-weight: 700; line-height: 0.98; letter-spacing: -0.03em; }
+  h1, h2, h3, h4 { font-weight: 700; line-height: 0.98; letter-spacing: 0; }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
