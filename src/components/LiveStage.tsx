@@ -82,26 +82,6 @@ const Actions = styled.div`
   flex: 0 0 auto;
 `;
 
-const Action = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 36px;
-  padding: 0 14px;
-  border: 1px solid ${({ theme }) => theme.color.lineInv};
-  border-radius: 100px;
-  font-family: ${({ theme }) => theme.font.mono};
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: ${({ theme }) => theme.color.paper};
-  transition: background 0.25s, color 0.25s;
-  &:hover {
-    background: ${({ theme }) => theme.color.paper};
-    color: ${({ theme }) => theme.color.ink};
-  }
-`;
-
 const CloseBtn = styled.button`
   width: 36px;
   height: 36px;
@@ -194,9 +174,6 @@ export function LiveStage({ work, onClose }: Props) {
         </Left>
         <LiveDot>LIVE</LiveDot>
         <Actions>
-          <Action href={work.studioUrl} target="_blank" rel="noreferrer" data-cursor="STUDIO">
-            AI STUDIO ↗
-          </Action>
           <CloseBtn onClick={onClose} aria-label="닫기" data-cursor="CLOSE">
             ✕
           </CloseBtn>

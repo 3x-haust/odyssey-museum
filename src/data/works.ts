@@ -3,10 +3,8 @@ export interface Work {
   index: string;
   artist: string;
   artistRoman: string;
-  /** Clean editorial headline used in the gallery. */
   title: string;
   titleEn: string;
-  /** Exact 작품명 as registered by the artist (shown in the dossier). */
   officialTitle: string;
   subtitle: string;
   theme: string;
@@ -14,21 +12,16 @@ export interface Work {
   highlights: string[];
   tags: string[];
   tech: string[];
-  /** Original Google AI Studio app (requires the author's Google sign-in). */
-  studioUrl: string;
-  /** Folder under /public/apps where the exported AI Studio build lives. */
   appSlug: string;
-  /** Flip to true once the exported code is placed in /public/apps/<appSlug>/. */
   liveReady: boolean;
-  /** Process-documentation PDF, when one exists. */
   pdf?: string;
 }
 
 export const exhibition = {
   title: 'ODYSSEY',
-  subtitle: '인터랙션 웹아트 7선',
-  tagline: '2001: 스페이스 오디세이를 일곱 개의 시선으로 재해석하다',
-  taglineEn: 'Seven interactive readings of 2001: A Space Odyssey',
+  subtitle: '인터랙션 웹아트 6선',
+  tagline: '2001: 스페이스 오디세이를 여섯 개의 시선으로 재해석하다',
+  taglineEn: 'Six interactive readings of 2001: A Space Odyssey',
   year: '2026',
 } as const;
 
@@ -52,9 +45,8 @@ export const works: Work[] = [
       '스타게이트의 강한 색 변화·왜곡으로 시공간 붕괴를 표현',
     ],
     tags: ['Scroll Narrative', 'HAL 9000', 'Stargate', 'Rebirth'],
-    tech: ['Google AI Studio', 'Scroll-driven Sequence'],
-    studioUrl: 'https://aistudio.google.com/apps/372eefa3-3298-41ba-acbc-a5cc585ab22e',
-    appSlug: 'kim-taehwan',
+    tech: ['Exported Web App', 'Scroll-driven Sequence'],
+    appSlug: '김태환',
     liveReady: true,
     pdf: '/works/kim-taehwan.pdf',
   },
@@ -77,33 +69,10 @@ export const works: Work[] = [
       '심연의 블랙 + 절제된 시안 네온 블룸의 고급스러운 질감',
     ],
     tags: ['WebGL', 'Three.js', '1:4:9', 'Bloom'],
-    tech: ['Google AI Studio', 'Three.js', 'EffectComposer'],
-    studioUrl: 'https://ai.studio/apps/8a0230cf-f424-42c3-be13-d7071507ca19',
-    appSlug: 'park-miju',
+    tech: ['Exported Web App', 'Three.js', 'EffectComposer'],
+    appSlug: '박미주',
     liveReady: true,
     pdf: '/works/park-miju.pdf',
-  },
-  {
-    id: 'ju-dain',
-    index: '03',
-    artist: '주다인',
-    artistRoman: 'JU DAIN',
-    title: '속도',
-    titleEn: 'Velocity',
-    officialTitle: '속도',
-    subtitle: '질주하는 시선, 가속하는 우주',
-    theme: '속도를 주제로 한 인터랙티브 웹 아트',
-    concept:
-      '<2001: 스페이스 오디세이>의 질주하는 이미지에서 출발해, 속도라는 감각 그 자체를 화면 위에서 체험하게 하는 인터랙티브 작품이다. Google AI Studio에서 제작되었다.',
-    highlights: [
-      '속도라는 감각을 인터랙션으로 시각화',
-      'Google AI Studio 기반 인터랙티브 웹 아트',
-    ],
-    tags: ['Velocity', 'Motion', '2001'],
-    tech: ['Google AI Studio', 'Interaction Design'],
-    studioUrl: 'https://aistudio.google.com/apps/6ded7724-f465-4c6b-8185-1343d585c158',
-    appSlug: 'ju-dain',
-    liveReady: true,
   },
   {
     id: 'park-chaeyoon',
@@ -124,9 +93,8 @@ export const works: Work[] = [
       '사용자가 직접 HAL의 내부 시스템을 해체하는 경험',
     ],
     tags: ['Surveillance', 'Data Panel', 'System Log', 'Eye'],
-    tech: ['Google AI Studio', 'Generative UI'],
-    studioUrl: 'https://ai.studio/apps/e540ec6c-8bd6-4c5d-b57f-14b3049ef2ea',
-    appSlug: 'park-chaeyoon',
+    tech: ['Exported Web App', 'Generative UI'],
+    appSlug: '박채윤',
     liveReady: true,
     pdf: '/works/park-chaeyoon.pdf',
   },
@@ -149,9 +117,8 @@ export const works: Work[] = [
       'SF 게임 타이틀 인트로 + 커스텀 타겟팅 커서',
     ],
     tags: ['Audio Reactive', 'Wheel Tempo', 'Themes', 'HUD'],
-    tech: ['Google AI Studio', 'Web Audio', 'Canvas'],
-    studioUrl: 'https://ai.studio/apps/3c478363-c2b5-4f5d-8405-0ed734e94f4b',
-    appSlug: 'jung-jiyoung',
+    tech: ['Exported Web App', 'Web Audio', 'Canvas'],
+    appSlug: '정지영',
     liveReady: true,
     pdf: '/works/jung-jiyoung.pdf',
   },
@@ -174,9 +141,8 @@ export const works: Work[] = [
       '[이스터에그] "HAL 9000" 입력 시 시스템 강제 제어',
     ],
     tags: ['Mouse Tracking', 'Glitch', 'Easter Egg', 'HAL 9000'],
-    tech: ['Google AI Studio', 'Web Audio'],
-    studioUrl: 'https://ai.studio/apps/0f4c28b8-6ec0-478f-ab04-35815ec6fd5b',
-    appSlug: 'jo-yechan',
+    tech: ['Exported Web App', 'Web Audio'],
+    appSlug: '조예찬',
     liveReady: true,
     pdf: '/works/jo-yechan.pdf',
   },
@@ -199,13 +165,11 @@ export const works: Work[] = [
       'Bloom·Vignette 포스트 프로세싱과 기계음 SFX',
     ],
     tags: ['R3F', 'InstancedMesh', 'Macro Zoom', 'Post FX'],
-    tech: ['Google AI Studio', 'React Three Fiber'],
-    studioUrl: 'https://aistudio.google.com/apps/bda8c63e-34d1-44a5-8f1d-797142f88136',
-    appSlug: 'lee-seohyun',
+    tech: ['Exported Web App', 'React Three Fiber'],
+    appSlug: '이서현',
     liveReady: true,
     pdf: '/works/lee-seohyun.pdf',
   },
 ];
 
-/** Total count, padded — single source of truth for "07" labels. */
 export const workCount = String(works.length).padStart(2, '0');

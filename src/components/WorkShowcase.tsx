@@ -200,48 +200,6 @@ const Primary = styled.button`
   }
 `;
 
-const GhostLink = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  height: 48px;
-  padding: 0 6px;
-  font-family: ${({ theme }) => theme.font.mono};
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.3s;
-  &:hover {
-    border-color: ${({ theme }) => theme.color.ink};
-  }
-`;
-
-const PrimaryLink = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  height: 48px;
-  padding: 0 22px;
-  background: ${({ theme }) => theme.color.ink};
-  color: ${({ theme }) => theme.color.paper};
-  font-family: ${({ theme }) => theme.font.mono};
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  border-radius: 100px;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  .ic {
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  &:hover {
-    transform: translateY(-2px);
-  }
-  &:hover .ic {
-    transform: translateX(4px);
-  }
-`;
-
 const Ghost = styled.button`
   display: inline-flex;
   align-items: center;
@@ -294,7 +252,7 @@ export function WorkShowcase({ work, i, total, onOpen, onLaunch }: Props) {
         >
           <Card>
             <Badges>
-              <Badge>AI STUDIO</Badge>
+              <Badge>EXPORT</Badge>
               {work.liveReady && <Badge $live>LIVE</Badge>}
             </Badges>
             <LensReveal>
@@ -342,9 +300,9 @@ export function WorkShowcase({ work, i, total, onOpen, onLaunch }: Props) {
                 제작 과정 보기 <span className="ic">→</span>
               </Primary>
             ) : (
-              <PrimaryLink href={work.studioUrl} target="_blank" rel="noreferrer" data-cursor="STUDIO">
-                AI Studio에서 열기 <span className="ic">↗</span>
-              </PrimaryLink>
+              <Primary onClick={() => onOpen(work)} data-cursor="OPEN">
+                작품 정보 보기 <span className="ic">→</span>
+              </Primary>
             )}
 
             {work.liveReady && work.pdf && (
@@ -352,10 +310,6 @@ export function WorkShowcase({ work, i, total, onOpen, onLaunch }: Props) {
                 제작 과정
               </Ghost>
             )}
-
-            <GhostLink href={work.studioUrl} target="_blank" rel="noreferrer" data-cursor="STUDIO">
-              AI Studio ↗
-            </GhostLink>
           </Actions>
         </motion.div>
       </Info>

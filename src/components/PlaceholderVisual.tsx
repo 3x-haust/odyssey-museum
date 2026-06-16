@@ -74,7 +74,7 @@ export function PlaceholderVisual({ work }: { work: Work }) {
       <Lines />
       <Top>
         <span>NO PROCESS DOC</span>
-        <span>AI STUDIO</span>
+        <span>LOCAL EXPORT</span>
       </Top>
       <Big>{work.titleEn}</Big>
       <Bottom>

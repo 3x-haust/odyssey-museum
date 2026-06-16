@@ -372,8 +372,8 @@ export function WorkModal({ work, onClose, onLaunch }: Props) {
                 작품 실행 (LIVE) <span className="ic">▶</span>
               </LiveBtn>
             ) : (
-              <LiveBtn as="a" href={work.studioUrl} target="_blank" rel="noreferrer" data-cursor="STUDIO">
-                AI Studio에서 열기 <span className="ic">↗</span>
+              <LiveBtn onClick={() => onLaunch(work)} data-cursor="OPEN">
+                작품 정보 보기 <span className="ic">→</span>
               </LiveBtn>
             )}
             <LinkRow>
@@ -382,9 +382,6 @@ export function WorkModal({ work, onClose, onLaunch }: Props) {
                   원본 PDF <span className="a">↗</span>
                 </Open>
               )}
-              <Open href={work.studioUrl} target="_blank" rel="noreferrer" data-cursor="STUDIO">
-                AI Studio <span className="a">↗</span>
-              </Open>
             </LinkRow>
           </ModalActions>
         </Aside>
@@ -408,19 +405,15 @@ export function WorkModal({ work, onClose, onLaunch }: Props) {
                   작품 실행 ▶
                 </BigLaunch>
               ) : (
-                <BigLaunch
-                  as="a"
-                  href={work.studioUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  data-cursor="STUDIO"
-                >
-                  AI Studio에서 열기 ↗
+                <BigLaunch onClick={onClose} data-cursor="CLOSE">
+                  닫기
                 </BigLaunch>
               )}
               <p className="note">
-                이 작품은 Google AI Studio로 제작되어 별도 배포본이 없습니다.
-                코드를 추가하면 이 자리에서 바로 실행됩니다.
+                제작 과정 PDF가 없어 대표 비주얼을 표시합니다.
+                {work.liveReady
+                  ? ' 작품 실행은 좌측 버튼에서 확인할 수 있습니다.'
+                  : ' 제공된 PDF와 올바른 프로젝트 export가 없어 작품 정보만 표시합니다.'}
               </p>
             </LaunchPanel>
           )}
