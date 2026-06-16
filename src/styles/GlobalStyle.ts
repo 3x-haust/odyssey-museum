@@ -15,6 +15,16 @@ export const GlobalStyle = createGlobalStyle`
   :root {
     color-scheme: light;
     --gutter: clamp(20px, 5vw, 80px);
+    --background: #ffffff;
+    --foreground: #111111;
+    --card: #ffffff;
+    --card-foreground: #111111;
+    --primary: #111111;
+    --primary-foreground: #ffffff;
+    --muted: #f2f2f2;
+    --muted-foreground: #666666;
+    --border: rgba(0, 0, 0, 0.16);
+    --input-background: #f5f5f5;
   }
 
   html { -webkit-text-size-adjust: 100%; }
@@ -26,8 +36,8 @@ export const GlobalStyle = createGlobalStyle`
   .lenis.lenis-stopped { overflow: hidden; }
 
   body {
-    background: ${({ theme }) => theme.color.paper};
-    color: ${({ theme }) => theme.color.ink};
+    background: var(--background);
+    color: var(--foreground);
     font-family: ${({ theme }) => theme.font.sans};
     font-weight: 400;
     line-height: 1.5;
@@ -41,6 +51,41 @@ export const GlobalStyle = createGlobalStyle`
   a { color: inherit; text-decoration: none; }
   button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
   img, canvas, svg, iframe { display: block; max-width: 100%; }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    z-index: 9999;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  *, *::before, *::after {
+    border-radius: 0 !important;
+  }
+
+  * {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--muted-foreground);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
 
   ::selection {
     background: ${({ theme }) => theme.color.ink};

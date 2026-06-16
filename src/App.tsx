@@ -1,229 +1,247 @@
 import { useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { theme } from './styles/theme';
 import { GlobalStyle } from './styles/GlobalStyle';
 import { works, workCount, type Work } from './data/works';
+import { PdfCanvas } from './components/PdfCanvas';
 import { WorkModal } from './components/WorkModal';
 import { LiveStage } from './components/LiveStage';
 
 const Shell = styled.div`
   min-height: 100svh;
-  background: ${({ theme }) => theme.color.paper};
-  color: ${({ theme }) => theme.color.ink};
+  background: var(--background, #ffffff);
+  color: var(--foreground, #111111);
 `;
 
 const Header = styled.header`
   position: sticky;
   top: 0;
   z-index: ${({ theme }) => theme.z.nav};
-  height: 58px;
-  border-bottom: 1px solid ${({ theme }) => theme.color.lineSoft};
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.16));
 `;
 
 const HeaderInner = styled.div`
-  height: 100%;
+  max-width: 1280px;
+  height: 56px;
+  margin: 0 auto;
+  padding: 0 16px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 0 clamp(20px, 3vw, 32px);
-`;
+  gap: 16px;
 
-const Brand = styled.button`
-  font-family: ${({ theme }) => theme.font.mono};
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0;
-`;
+  @media (min-width: 640px) {
+    padding: 0 24px;
+  }
 
-const HeaderMeta = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  font-family: ${({ theme }) => theme.font.mono};
-  font-size: 12px;
-  color: ${({ theme }) => theme.color.g500};
-
-  @media (max-width: 640px) {
-    .hide-sm {
-      display: none;
-    }
+  @media (min-width: 1024px) {
+    padding: 0 32px;
   }
 `;
 
+const Brand = styled.button`
+  flex: 0 0 auto;
+  font-family: ${({ theme }) => theme.font.sans};
+  font-size: 1.5rem;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0;
+`;
+
+const HeaderSpacer = styled.div`
+  margin-left: auto;
+  color: var(--muted-foreground, #666666);
+  font-size: 0.875rem;
+`;
+
 const Main = styled.main`
-  padding: 0 clamp(20px, 3vw, 32px);
+  padding-bottom: 80px;
 `;
 
-const Hero = styled.section`
-  min-height: clamp(410px, 55svh, 560px);
-  display: grid;
-  place-items: center;
-  border-bottom: 1px solid ${({ theme }) => theme.color.lineSoft};
+const Container = styled.div`
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 16px 0;
+
+  @media (min-width: 640px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  @media (min-width: 1024px) {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
 `;
 
-const TitleBlock = styled.div`
-  width: min(1040px, 100%);
+const Hero = styled(motion.section)`
+  margin-bottom: 24px;
   text-align: center;
 `;
 
-const Eyebrow = styled.p`
-  margin-bottom: 26px;
-  font-family: ${({ theme }) => theme.font.mono};
-  font-size: 13px;
-  color: ${({ theme }) => theme.color.g500};
-`;
-
-const Title = styled.h1`
-  font-family: ${({ theme }) => theme.font.kr};
-  font-size: clamp(3rem, 9vw, 8.5rem);
-  font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: 0;
-  text-wrap: balance;
-  word-break: keep-all;
-`;
-
-const Intro = styled.p`
-  max-width: 760px;
-  margin: 28px auto 0;
-  font-family: ${({ theme }) => theme.font.kr};
-  font-size: clamp(1rem, 1.7vw, 1.22rem);
-  line-height: 1.7;
-  color: ${({ theme }) => theme.color.g700};
-  word-break: keep-all;
-`;
-
-const ListSection = styled.section`
-  max-width: 1012px;
+const HeroTitle = styled.p`
+  max-width: 1024px;
   margin: 0 auto;
-  padding: clamp(38px, 6vw, 76px) 0 clamp(80px, 10vw, 140px);
+  color: var(--foreground, #111111);
+  font-size: clamp(1.5rem, 4.3vw, 2.25rem);
+  line-height: 1.38;
+  word-break: keep-all;
+
+  strong {
+    font-weight: 700;
+  }
+
+  .highlight {
+    display: inline-block;
+    margin: 0 0.38em;
+    padding: 0 0.34em 0.04em;
+    color: var(--background, #ffffff);
+    background: var(--foreground, #111111);
+    font-weight: 600;
+    white-space: nowrap;
+    vertical-align: baseline;
+  }
 `;
 
-const ListHeader = styled.div`
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+const Cards = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 20px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid ${({ theme }) => theme.color.ink};
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 `;
 
-const ListTitle = styled.h2`
-  font-family: ${({ theme }) => theme.font.kr};
-  font-size: clamp(1.15rem, 2vw, 1.5rem);
-  font-weight: 700;
-  letter-spacing: 0;
+const CardWrap = styled(motion.article)`
+  height: 100%;
 `;
 
-const Count = styled.span`
-  font-family: ${({ theme }) => theme.font.mono};
-  font-size: 12px;
-  color: ${({ theme }) => theme.color.g500};
+const Card = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--card, #ffffff);
+  border: 1px solid var(--border, rgba(0, 0, 0, 0.16));
+  transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 0, 0, 0.24);
+    box-shadow: 0 16px 34px rgba(17, 17, 17, 0.1);
+  }
 `;
 
-const PostList = styled.div`
+const PreviewButton = styled.button`
+  position: relative;
+  width: 100%;
+  height: 192px;
+  overflow: hidden;
+  background: var(--muted, #f2f2f2);
+  text-align: left;
+
+  & > div {
+    min-height: 192px;
+    transition: transform 0.5s ease;
+  }
+
+  ${Card}:hover & > div {
+    transform: scale(1.05);
+  }
+`;
+
+const PreviewFallback = styled.div`
+  height: 192px;
+  display: grid;
+  place-items: center;
+  background: var(--muted, #f2f2f2);
+  color: var(--muted-foreground, #666666);
+  font-size: 0.875rem;
+`;
+
+const CardBody = styled.div`
+  padding: 24px;
+  flex: 1;
   display: flex;
   flex-direction: column;
 `;
 
-const Post = styled.article`
-  display: grid;
-  grid-template-columns: 76px minmax(0, 1fr) auto;
-  gap: clamp(18px, 3vw, 36px);
-  align-items: baseline;
-  padding: clamp(22px, 4vw, 38px) 0;
-  border-bottom: 1px solid ${({ theme }) => theme.color.lineSoft};
+const PostTitle = styled.button`
+  width: 100%;
+  text-align: left;
+  margin-bottom: 12px;
+  color: var(--foreground, #111111);
+  font-family: ${({ theme }) => theme.font.kr};
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.5;
+  word-break: keep-all;
+  transition: color 0.3s ease;
 
-  @media (max-width: 760px) {
-    grid-template-columns: 1fr;
-    gap: 12px;
+  ${Card}:hover & {
+    color: var(--primary, #111111);
   }
 `;
 
-const Index = styled.div`
-  font-family: ${({ theme }) => theme.font.mono};
-  font-size: 12px;
-  color: ${({ theme }) => theme.color.g500};
-`;
-
-const PostBody = styled.div`
-  min-width: 0;
-`;
-
-const PostTitle = styled.h3`
+const Excerpt = styled.p`
+  margin-bottom: 16px;
+  color: var(--muted-foreground, #666666);
   font-family: ${({ theme }) => theme.font.kr};
-  font-size: clamp(1.65rem, 4vw, 3.15rem);
-  font-weight: 760;
-  line-height: 1.08;
-  letter-spacing: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
   word-break: keep-all;
 `;
 
-const PostSub = styled.p`
-  margin-top: 10px;
-  max-width: 720px;
-  font-family: ${({ theme }) => theme.font.kr};
-  font-size: clamp(0.98rem, 1.5vw, 1.08rem);
-  line-height: 1.68;
-  color: ${({ theme }) => theme.color.g700};
-  word-break: keep-all;
+const Meta = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--muted-foreground, #666666);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  flex-wrap: wrap;
 `;
 
-const Artist = styled.p`
-  margin-top: 16px;
-  font-family: ${({ theme }) => theme.font.mono};
-  font-size: 12px;
-  color: ${({ theme }) => theme.color.g500};
+const Dot = styled.span`
+  width: 3px;
+  height: 3px;
+  background: currentColor;
+  display: inline-block;
 `;
 
 const Actions = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-
-  @media (max-width: 760px) {
-    justify-content: flex-start;
-  }
+  gap: 8px;
+  margin-top: 20px;
 `;
 
 const Action = styled.button<{ $primary?: boolean }>`
-  height: 38px;
+  min-height: 36px;
   padding: 0 14px;
   border: 1px solid
-    ${({ theme, $primary }) => ($primary ? theme.color.ink : theme.color.line)};
-  background: ${({ theme, $primary }) => ($primary ? theme.color.ink : theme.color.paper)};
-  color: ${({ theme, $primary }) => ($primary ? theme.color.paper : theme.color.ink)};
-  font-family: ${({ theme }) => theme.font.kr};
-  font-size: 14px;
-  border-radius: 6px;
-  white-space: nowrap;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    ${({ $primary }) =>
+      $primary ? 'var(--primary, #111111)' : 'var(--border, rgba(0, 0, 0, 0.16))'};
+  background: ${({ $primary }) => ($primary ? 'var(--primary, #111111)' : 'transparent')};
+  color: ${({ $primary }) => ($primary ? 'var(--primary-foreground, #ffffff)' : 'inherit')};
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 
   &:hover {
-    border-color: ${({ theme }) => theme.color.ink};
-    background: ${({ theme, $primary }) => ($primary ? theme.color.g900 : theme.color.g100)};
-  }
-`;
-
-const Footer = styled.footer`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 28px clamp(20px, 3vw, 32px);
-  border-top: 1px solid ${({ theme }) => theme.color.lineSoft};
-  font-family: ${({ theme }) => theme.font.mono};
-  font-size: 12px;
-  color: ${({ theme }) => theme.color.g500};
-
-  @media (max-width: 640px) {
-    align-items: flex-start;
-    flex-direction: column;
+    border-color: var(--primary, #111111);
+    background: ${({ $primary }) => ($primary ? '#2a2a2a' : 'var(--muted, #f2f2f2)')};
   }
 `;
 
@@ -240,60 +258,70 @@ export default function App() {
             <Brand onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               EX.IT
             </Brand>
-            <HeaderMeta>
-              <span>{workCount} posts</span>
-              <span className="hide-sm">Interactive Web Art</span>
-            </HeaderMeta>
+            <HeaderSpacer>{workCount} posts</HeaderSpacer>
           </HeaderInner>
         </Header>
 
         <Main>
-          <Hero>
-            <TitleBlock>
-              <Eyebrow>2001: A Space Odyssey</Eyebrow>
-              <Title>2001 스페이스 오디세이 인터랙션 웹아트</Title>
-              <Intro>
-                영화의 시간, 감시, 진화, 소리와 공간을 각자의 방식으로 다시 만든
-                인터랙션 웹아트 기록입니다.
-              </Intro>
-            </TitleBlock>
-          </Hero>
+          <Container>
+            <Hero initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <HeroTitle>
+                2001 스페이스 오디세이
+                <span className="highlight">인터랙션 웹아트</span>
+              </HeroTitle>
+            </Hero>
 
-          <ListSection aria-label="작품 글 목록">
-            <ListHeader>
-              <ListTitle>글 목록</ListTitle>
-              <Count>{workCount} entries</Count>
-            </ListHeader>
+            <Cards>
+              {works.map((work, index) => (
+                <CardWrap
+                  key={work.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.08 }}
+                >
+                  <Card>
+                    <PreviewButton
+                      type="button"
+                      onClick={() => setInfoWork(work)}
+                      aria-label={`${work.title} 자세히 보기`}
+                    >
+                      {work.pdf ? (
+                        <PdfCanvas url={work.pdf} label={`WORK ${work.index}`} />
+                      ) : (
+                        <PreviewFallback>{work.titleEn}</PreviewFallback>
+                      )}
+                    </PreviewButton>
 
-            <PostList>
-              {works.map((work) => (
-                <Post key={work.id}>
-                  <Index>{work.index}</Index>
-                  <PostBody>
-                    <PostTitle>{work.title}</PostTitle>
-                    <PostSub>{work.theme}</PostSub>
-                    <Artist>
-                      {work.artist} · {work.artistRoman}
-                    </Artist>
-                  </PostBody>
-                  <Actions>
-                    <Action onClick={() => setInfoWork(work)}>읽기</Action>
-                    {work.liveReady && (
-                      <Action $primary onClick={() => setLiveWork(work)}>
-                        실행
-                      </Action>
-                    )}
-                  </Actions>
-                </Post>
+                    <CardBody>
+                      <PostTitle type="button" onClick={() => setInfoWork(work)}>
+                        {work.title}
+                      </PostTitle>
+                      <Excerpt>{work.theme}</Excerpt>
+                      <Meta>
+                        <span>{work.artist}</span>
+                        <Dot aria-hidden />
+                        <span>Work {work.index}</span>
+                        <Dot aria-hidden />
+                        <span>Interactive</span>
+                      </Meta>
+
+                      <Actions>
+                        <Action type="button" onClick={() => setInfoWork(work)}>
+                          읽기
+                        </Action>
+                        {work.liveReady && (
+                          <Action $primary type="button" onClick={() => setLiveWork(work)}>
+                            실행
+                          </Action>
+                        )}
+                      </Actions>
+                    </CardBody>
+                  </Card>
+                </CardWrap>
               ))}
-            </PostList>
-          </ListSection>
+            </Cards>
+          </Container>
         </Main>
-
-        <Footer>
-          <span>EX.IT</span>
-          <span>2001 스페이스 오디세이 인터랙션 웹아트</span>
-        </Footer>
 
         <AnimatePresence>
           {infoWork && (
