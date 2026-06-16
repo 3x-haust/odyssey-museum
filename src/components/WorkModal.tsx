@@ -1,0 +1,431 @@
+import { useEffect } from 'react';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import type { Work } from '../data/works';
+import { useScrollLock } from '../hooks/useSmoothScroll';
+import { PlaceholderVisual } from './PlaceholderVisual';
+
+const Backdrop = styled(motion.div)`
+  position: fixed;
+  inset: 0;
+  z-index: ${({ theme }) => theme.z.modal};
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px) saturate(120%);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+`;
+
+const Panel = styled(motion.div)`
+  position: relative;
+  width: min(1500px, 96vw);
+  margin: clamp(14px, 3vh, 40px) auto;
+  background: ${({ theme }) => theme.color.paper};
+  color: ${({ theme }) => theme.color.ink};
+  display: grid;
+  grid-template-columns: minmax(320px, 4fr) 7fr;
+  overflow: hidden;
+  border: 1px solid ${({ theme }) => theme.color.ink};
+  max-height: calc(100vh - clamp(28px, 6vh, 80px));
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+    max-height: calc(100vh - 28px);
+  }
+`;
+
+const Aside = styled.div`
+  padding: clamp(24px, 3vw, 48px);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid ${({ theme }) => theme.color.line};
+  overflow-y: auto;
+
+  @media (max-width: 860px) {
+    border-right: none;
+    border-bottom: 1px solid ${({ theme }) => theme.color.line};
+    max-height: 44vh;
+  }
+`;
+
+const Meta = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.color.g500};
+  margin-bottom: 1.4rem;
+`;
+
+const Title = styled.h3`
+  font-family: ${({ theme }) => theme.font.kr};
+  font-weight: 900;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+`;
+
+const TitleEn = styled.span`
+  display: block;
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.color.g500};
+  margin: 0.6rem 0 1.6rem;
+`;
+
+const Label = styled.h4`
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.color.g500};
+  margin: 1.8rem 0 0.7rem;
+`;
+
+const Concept = styled.p`
+  font-family: ${({ theme }) => theme.font.kr};
+  font-weight: 300;
+  font-size: 0.96rem;
+  line-height: 1.75;
+  color: ${({ theme }) => theme.color.g900};
+`;
+
+const List = styled.ul`
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+`;
+
+const ListItem = styled.li`
+  position: relative;
+  padding-left: 1.4rem;
+  font-family: ${({ theme }) => theme.font.kr};
+  font-weight: 300;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: ${({ theme }) => theme.color.g700};
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    background: ${({ theme }) => theme.color.ink};
+  }
+`;
+
+const TechRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+`;
+
+const TechChip = styled.span`
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  background: ${({ theme }) => theme.color.ink};
+  color: ${({ theme }) => theme.color.paper};
+`;
+
+const OfficialName = styled.p`
+  font-family: ${({ theme }) => theme.font.kr};
+  font-weight: 500;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: ${({ theme }) => theme.color.g700};
+  padding-left: 12px;
+  border-left: 2px solid ${({ theme }) => theme.color.ink};
+  margin-bottom: 1.4rem;
+`;
+
+const ModalActions = styled.div`
+  margin-top: auto;
+  padding-top: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const LiveBtn = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  padding: 0 20px;
+  background: ${({ theme }) => theme.color.ink};
+  color: ${({ theme }) => theme.color.paper};
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 100px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  .ic {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  &:hover {
+    transform: translateY(-2px);
+  }
+  &:hover .ic {
+    transform: translateX(4px);
+  }
+`;
+
+const LinkRow = styled.div`
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
+const Open = styled.a`
+  flex: 1;
+  min-width: 140px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 46px;
+  padding: 0 18px;
+  border: 1px solid ${({ theme }) => theme.color.ink};
+  border-radius: 100px;
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: background 0.3s, color 0.3s;
+  span.a {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  &:hover {
+    background: ${({ theme }) => theme.color.ink};
+    color: ${({ theme }) => theme.color.paper};
+  }
+  &:hover span.a {
+    transform: translate(4px, -4px);
+  }
+`;
+
+const LaunchPanel = styled.div`
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+  padding: 2rem;
+  text-align: center;
+  color: ${({ theme }) => theme.color.paper};
+
+  .frame {
+    width: min(80%, 520px);
+  }
+  .note {
+    font-family: ${({ theme }) => theme.font.mono};
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    max-width: 42ch;
+    line-height: 1.8;
+  }
+`;
+
+const BigLaunch = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 54px;
+  padding: 0 28px;
+  background: ${({ theme }) => theme.color.paper};
+  color: ${({ theme }) => theme.color.ink};
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-radius: 100px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  &:hover {
+    transform: scale(1.04);
+  }
+`;
+
+const Viewer = styled.div`
+  position: relative;
+  background: ${({ theme }) => theme.color.g700};
+  min-height: 300px;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  @media (max-width: 860px) {
+    min-height: 52vh;
+  }
+`;
+
+const Close = styled.button`
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: ${({ theme }) => theme.color.paper};
+  border: 1px solid ${({ theme }) => theme.color.ink};
+  border-radius: 50%;
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 16px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s;
+
+  &:hover {
+    transform: rotate(90deg);
+    background: ${({ theme }) => theme.color.ink};
+    color: ${({ theme }) => theme.color.paper};
+  }
+`;
+
+interface Props {
+  work: Work;
+  onClose: () => void;
+  onLaunch: (work: Work) => void;
+}
+
+export function WorkModal({ work, onClose, onLaunch }: Props) {
+  useScrollLock(true);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  return (
+    <Backdrop
+      onClick={onClose}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <Panel
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${work.artist} — ${work.title}`}
+        onClick={(e) => e.stopPropagation()}
+        initial={{ opacity: 0, y: 40, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 30, scale: 0.98 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <Aside data-lenis-prevent>
+          <Meta>
+            <span>WORK {work.index}</span>
+            <span>{work.artist}</span>
+          </Meta>
+          <Title>{work.title}</Title>
+          <TitleEn>{work.titleEn}</TitleEn>
+
+          {work.officialTitle !== work.title && (
+            <OfficialName>작품명 — {work.officialTitle}</OfficialName>
+          )}
+
+          <Label>주제 / Theme</Label>
+          <Concept>{work.theme}</Concept>
+
+          <Label>콘셉트 / Concept</Label>
+          <Concept>{work.concept}</Concept>
+
+          <Label>중점 / Highlights</Label>
+          <List>
+            {work.highlights.map((h, i) => (
+              <ListItem key={i}>{h}</ListItem>
+            ))}
+          </List>
+
+          <Label>기술 / Stack</Label>
+          <TechRow>
+            {work.tech.map((t) => (
+              <TechChip key={t}>{t}</TechChip>
+            ))}
+          </TechRow>
+
+          <ModalActions>
+            {work.liveReady ? (
+              <LiveBtn onClick={() => onLaunch(work)} data-cursor="LAUNCH">
+                작품 실행 (LIVE) <span className="ic">▶</span>
+              </LiveBtn>
+            ) : (
+              <LiveBtn as="a" href={work.studioUrl} target="_blank" rel="noreferrer" data-cursor="STUDIO">
+                AI Studio에서 열기 <span className="ic">↗</span>
+              </LiveBtn>
+            )}
+            <LinkRow>
+              {work.pdf && (
+                <Open href={work.pdf} target="_blank" rel="noreferrer" data-cursor="PDF">
+                  원본 PDF <span className="a">↗</span>
+                </Open>
+              )}
+              <Open href={work.studioUrl} target="_blank" rel="noreferrer" data-cursor="STUDIO">
+                AI Studio <span className="a">↗</span>
+              </Open>
+            </LinkRow>
+          </ModalActions>
+        </Aside>
+
+        <Viewer>
+          <Close onClick={onClose} aria-label="닫기" data-cursor="CLOSE">
+            ✕
+          </Close>
+          {work.pdf ? (
+            <iframe
+              src={`${work.pdf}#view=FitH&toolbar=1`}
+              title={`${work.artist} ${work.title} PDF`}
+            />
+          ) : (
+            <LaunchPanel>
+              <div className="frame">
+                <PlaceholderVisual work={work} />
+              </div>
+              {work.liveReady ? (
+                <BigLaunch onClick={() => onLaunch(work)} data-cursor="LAUNCH">
+                  작품 실행 ▶
+                </BigLaunch>
+              ) : (
+                <BigLaunch
+                  as="a"
+                  href={work.studioUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-cursor="STUDIO"
+                >
+                  AI Studio에서 열기 ↗
+                </BigLaunch>
+              )}
+              <p className="note">
+                이 작품은 Google AI Studio로 제작되어 별도 배포본이 없습니다.
+                코드를 추가하면 이 자리에서 바로 실행됩니다.
+              </p>
+            </LaunchPanel>
+          )}
+        </Viewer>
+      </Panel>
+    </Backdrop>
+  );
+}
