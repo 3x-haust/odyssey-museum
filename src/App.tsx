@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { theme } from './styles/theme';
 import { GlobalStyle } from './styles/GlobalStyle';
 import { works, workCount, type Work } from './data/works';
-import { PdfCanvas } from './components/PdfCanvas';
 import { WorkModal } from './components/WorkModal';
 import { LiveStage } from './components/LiveStage';
 
@@ -157,13 +156,17 @@ const PreviewButton = styled.button`
   }
 `;
 
-const PreviewFallback = styled.div`
+const PreviewArt = styled.div`
   height: 192px;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--muted, #f2f2f2);
   color: var(--muted-foreground, #666666);
-  font-size: 0.875rem;
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 0.82rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
 `;
 
 const CardBody = styled.div`
@@ -285,11 +288,7 @@ export default function App() {
                       onClick={() => setInfoWork(work)}
                       aria-label={`${work.title} 자세히 보기`}
                     >
-                      {work.pdf ? (
-                        <PdfCanvas url={work.pdf} label={`WORK ${work.index}`} />
-                      ) : (
-                        <PreviewFallback>{work.titleEn}</PreviewFallback>
-                      )}
+                      <PreviewArt>WORK {work.index}</PreviewArt>
                     </PreviewButton>
 
                     <CardBody>
