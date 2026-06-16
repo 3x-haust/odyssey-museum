@@ -3,7 +3,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { AnimatePresence, motion } from 'framer-motion';
 import { theme } from './styles/theme';
 import { GlobalStyle } from './styles/GlobalStyle';
-import { works, workCount, type Work } from './data/works';
+import { works, type Work } from './data/works';
 import { WorkModal } from './components/WorkModal';
 import { LiveStage } from './components/LiveStage';
 
@@ -49,10 +49,11 @@ const Brand = styled.button`
   letter-spacing: 0;
 `;
 
-const HeaderSpacer = styled.div`
+const HeaderLogo = styled.img`
   margin-left: auto;
-  color: var(--muted-foreground, #666666);
-  font-size: 0.875rem;
+  width: clamp(130px, 18vw, 180px);
+  height: auto;
+  display: block;
 `;
 
 const Main = styled.main`
@@ -156,17 +157,12 @@ const PreviewButton = styled.button`
   }
 `;
 
-const PreviewArt = styled.div`
+const PreviewImage = styled.img`
+  width: 100%;
   height: 192px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  object-fit: cover;
+  object-position: top center;
   background: var(--muted, #f2f2f2);
-  color: var(--muted-foreground, #666666);
-  font-family: ${({ theme }) => theme.font.mono};
-  font-size: 0.82rem;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
 `;
 
 const CardBody = styled.div`
@@ -261,7 +257,7 @@ export default function App() {
             <Brand onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               EX.IT
             </Brand>
-            <HeaderSpacer>{workCount} posts</HeaderSpacer>
+            <HeaderLogo src="/mirim_logo.svg" alt="Mirim Meister School" />
           </HeaderInner>
         </Header>
 
@@ -288,7 +284,11 @@ export default function App() {
                       onClick={() => setInfoWork(work)}
                       aria-label={`${work.title} 자세히 보기`}
                     >
-                      <PreviewArt>WORK {work.index}</PreviewArt>
+                      <PreviewImage
+                        src={`/work-thumbs/${work.id}.png`}
+                        alt={`${work.title} preview`}
+                        loading={index < 3 ? 'eager' : 'lazy'}
+                      />
                     </PreviewButton>
 
                     <CardBody>
