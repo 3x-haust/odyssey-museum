@@ -114,7 +114,7 @@ const Hero = styled(motion.section)`
 const HeroTitle = styled.p`
   max-width: 1024px;
   margin: 0 auto;
-  color: var(--foreground, #111111);
+  color: #ffffff;
   font-size: clamp(1.55rem, 3.45vw, 3.65rem);
   line-height: 1.18;
   word-break: keep-all;
@@ -127,8 +127,8 @@ const HeroTitle = styled.p`
     display: inline-block;
     margin: 0 0.38em;
     padding: 0 0.34em 0.04em;
-    color: var(--background, #ffffff);
-    background: var(--foreground, #111111);
+    color: #111111;
+    background: #ffffff;
     font-weight: 600;
     white-space: nowrap;
     vertical-align: baseline;
@@ -279,7 +279,7 @@ export default function App() {
               <Hero initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <HeroTitle>
                   2001 스페이스 오디세이
-                  <span className="highlight">인터랙션 웹아트</span>
+                  <span className="highlight">인터렉션 웹아트</span>
                 </HeroTitle>
               </Hero>
 
