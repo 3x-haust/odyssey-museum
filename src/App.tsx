@@ -102,8 +102,9 @@ const Container = styled.div`
   margin: 0 auto;
   padding: clamp(16px, 2.1vw, 30px) clamp(18px, 2.4vw, 44px) clamp(14px, 1.5vw, 22px);
   display: grid;
-  grid-template-rows: auto 1fr;
-  gap: clamp(12px, 1.45vw, 20px);
+  grid-template-rows: auto auto;
+  align-content: center;
+  gap: clamp(28px, 3vw, 46px);
 `;
 
 const Hero = styled(motion.section)`
@@ -137,18 +138,18 @@ const HeroTitle = styled.p`
 const Cards = styled.div`
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: clamp(10px, 1vw, 16px);
+  grid-template-rows: repeat(2, auto);
+  gap: clamp(20px, 2vw, 34px);
   min-height: 0;
 
   @media (max-width: 760px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(3, auto);
   }
 `;
 
 const CardWrap = styled(motion.article)`
-  height: 100%;
+  height: clamp(190px, 21vh, 245px);
 `;
 
 const Card = styled.div`
@@ -194,7 +195,7 @@ const PostTitle = styled.button`
 `;
 
 const Excerpt = styled.p`
-  margin-bottom: clamp(18px, 2.3vw, 44px);
+  margin-bottom: clamp(12px, 1.2vw, 22px);
   color: var(--muted-foreground, #666666);
   font-family: ${({ theme }) => theme.font.kr};
   font-size: clamp(0.78rem, 1vw, 1.05rem);
@@ -226,7 +227,7 @@ const Dot = styled.span`
 const Actions = styled.div`
   display: flex;
   gap: 8px;
-  margin-top: clamp(12px, 1.4vw, 24px);
+  margin-top: clamp(10px, 1vw, 18px);
 `;
 
 const Action = styled.button<{ $primary?: boolean }>`
