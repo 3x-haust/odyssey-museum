@@ -115,8 +115,9 @@ const HeroTitle = styled.p`
   max-width: 1024px;
   margin: 0 auto;
   color: #ffffff;
+  font-family: ${({ theme }) => theme.font.kr};
   font-size: clamp(1.55rem, 3.45vw, 3.65rem);
-  line-height: 1.18;
+  line-height: 1.12;
   word-break: keep-all;
 
   strong {
@@ -124,14 +125,19 @@ const HeroTitle = styled.p`
   }
 
   .highlight {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     margin: 0 0.38em;
-    padding: 0 0.34em 0.04em;
+    min-height: 1.18em;
+    padding: 0.145em 0.34em;
     color: #111111;
     background: #ffffff;
-    font-weight: 600;
+    font-family: ${({ theme }) => theme.font.kr};
+    font-weight: 800;
+    line-height: 1;
     white-space: nowrap;
-    vertical-align: baseline;
+    vertical-align: middle;
   }
 `;
 
