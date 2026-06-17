@@ -175,6 +175,7 @@ const CardBody = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  font-family: ${({ theme }) => theme.font.kr};
 `;
 
 const PostTitle = styled.button`
@@ -196,23 +197,24 @@ const PostTitle = styled.button`
 
 const Excerpt = styled.p`
   margin-bottom: clamp(12px, 1.2vw, 22px);
-  color: var(--muted-foreground, #666666);
+  color: #161616;
   font-family: ${({ theme }) => theme.font.kr};
-  font-size: clamp(0.78rem, 1vw, 1.05rem);
-  line-height: 1.62;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  font-size: clamp(0.96rem, 1.18vw, 1.28rem);
+  font-weight: 700;
+  line-height: 1.5;
   overflow: hidden;
   word-break: keep-all;
+  overflow-wrap: normal;
 `;
 
 const Meta = styled.div`
   display: flex;
   align-items: center;
   gap: 14px;
-  color: var(--muted-foreground, #666666);
-  font-size: clamp(0.68rem, 0.82vw, 0.86rem);
+  color: #262626;
+  font-family: ${({ theme }) => theme.font.kr};
+  font-weight: 700;
+  font-size: clamp(0.74rem, 0.9vw, 0.95rem);
   line-height: 1.2;
   flex-wrap: wrap;
 `;

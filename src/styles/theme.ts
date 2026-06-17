@@ -18,9 +18,11 @@ export const theme = {
     lineInvSoft: 'rgba(255, 255, 255, 0.08)',
   },
   font: {
-    display: "'Archivo Black', 'Noto Sans KR', sans-serif",
-    sans: "'Archivo', 'Noto Sans KR', system-ui, sans-serif",
-    kr: "'Noto Sans KR', system-ui, sans-serif",
+    display:
+      "'Archivo Black', 'Apple SD Gothic Neo', 'Pretendard', 'Noto Sans KR', 'Malgun Gothic', sans-serif",
+    sans:
+      "'Apple SD Gothic Neo', 'Pretendard', 'Noto Sans KR', 'Malgun Gothic', 'Archivo', system-ui, sans-serif",
+    kr: "'Apple SD Gothic Neo', 'Pretendard', 'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif",
     mono: "'IBM Plex Mono', 'SFMono-Regular', monospace",
   },
   // cubic-bezier easings used across motion components
