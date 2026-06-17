@@ -23,7 +23,7 @@ const BackgroundVideo = styled.video`
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  filter: grayscale(0.25) contrast(1.08) brightness(0.88);
+  filter: grayscale(0.18) contrast(1.12) brightness(0.56);
 `;
 
 const BackdropTint = styled.div`
@@ -33,9 +33,9 @@ const BackdropTint = styled.div`
   pointer-events: none;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.46) 0%,
-    rgba(255, 255, 255, 0.26) 44%,
-    rgba(255, 255, 255, 0.34) 100%
+    rgba(0, 0, 0, 0.26) 0%,
+    rgba(0, 0, 0, 0.12) 44%,
+    rgba(0, 0, 0, 0.24) 100%
   );
 `;
 
@@ -47,7 +47,7 @@ const Stage = styled.div`
   min-height: 540px;
   margin: 0 auto;
   display: grid;
-  grid-template-rows: 58px 1fr 52px;
+  grid-template-rows: 58px 1fr;
 
   @media (max-height: 720px) {
     min-height: 100svh;
@@ -138,18 +138,19 @@ const HeroTitle = styled.p`
 const Cards = styled.div`
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-template-rows: repeat(2, auto);
+  grid-template-rows: repeat(2, clamp(220px, 23vh, 270px));
   gap: clamp(20px, 2vw, 34px);
   min-height: 0;
 
   @media (max-width: 760px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(3, auto);
+    grid-template-rows: repeat(3, clamp(176px, 18vh, 220px));
   }
 `;
 
 const CardWrap = styled(motion.article)`
-  height: clamp(190px, 21vh, 245px);
+  height: 100%;
+  min-height: 0;
 `;
 
 const Card = styled.div`
@@ -171,7 +172,7 @@ const Card = styled.div`
 
 const CardBody = styled.div`
   min-height: 0;
-  padding: clamp(16px, 1.75vw, 30px);
+  padding: clamp(16px, 1.55vw, 26px);
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -184,7 +185,7 @@ const PostTitle = styled.button`
   margin-bottom: clamp(8px, 0.8vw, 14px);
   color: var(--foreground, #111111);
   font-family: ${({ theme }) => theme.font.kr};
-  font-size: clamp(1.12rem, 1.55vw, 1.7rem);
+  font-size: clamp(1.08rem, 1.38vw, 1.5rem);
   font-weight: 700;
   line-height: 1.35;
   word-break: keep-all;
@@ -199,10 +200,10 @@ const Excerpt = styled.p`
   margin-bottom: clamp(12px, 1.2vw, 22px);
   color: #161616;
   font-family: ${({ theme }) => theme.font.kr};
-  font-size: clamp(0.96rem, 1.18vw, 1.28rem);
+  font-size: clamp(0.88rem, 0.98vw, 1.08rem);
   font-weight: 700;
-  line-height: 1.5;
-  overflow: hidden;
+  line-height: 1.75;
+  overflow: visible;
   word-break: keep-all;
   overflow-wrap: normal;
 `;
@@ -214,8 +215,8 @@ const Meta = styled.div`
   color: #262626;
   font-family: ${({ theme }) => theme.font.kr};
   font-weight: 700;
-  font-size: clamp(0.74rem, 0.9vw, 0.95rem);
-  line-height: 1.2;
+  font-size: clamp(0.7rem, 0.78vw, 0.86rem);
+  line-height: 1.45;
   flex-wrap: wrap;
 `;
 
@@ -229,7 +230,8 @@ const Dot = styled.span`
 const Actions = styled.div`
   display: flex;
   gap: 8px;
-  margin-top: clamp(10px, 1vw, 18px);
+  margin-top: auto;
+  padding-top: clamp(10px, 1vw, 18px);
 `;
 
 const Action = styled.button<{ $primary?: boolean }>`
@@ -242,58 +244,12 @@ const Action = styled.button<{ $primary?: boolean }>`
   color: ${({ $primary }) => ($primary ? 'var(--primary-foreground, #ffffff)' : 'inherit')};
   font-size: clamp(0.75rem, 0.88vw, 0.92rem);
   font-weight: 500;
+  line-height: 1.2;
   transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 
   &:hover {
     border-color: var(--primary, #111111);
     background: ${({ $primary }) => ($primary ? '#2a2a2a' : 'var(--muted, #f2f2f2)')};
-  }
-`;
-
-const Footer = styled.footer`
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(16px);
-  border-top: 1px solid var(--border, rgba(0, 0, 0, 0.16));
-`;
-
-const FooterInner = styled.div`
-  max-width: 100%;
-  margin: 0 auto;
-  height: 52px;
-  padding: 0 clamp(18px, 3.2vw, 54px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  color: var(--muted-foreground, #666666);
-  font-size: 0.75rem;
-  line-height: 1.4;
-
-  @media (max-width: 560px) {
-    align-items: center;
-    flex-direction: row;
-  }
-`;
-
-const FooterBrand = styled.span`
-  color: var(--foreground, #111111);
-  font-weight: 600;
-`;
-
-const SocialLinks = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-
-  a {
-    color: inherit;
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  a:hover {
-    color: var(--foreground, #111111);
   }
 `;
 
@@ -367,19 +323,6 @@ export default function App() {
             </Container>
           </Main>
 
-          <Footer>
-            <FooterInner>
-              <FooterBrand>EX.IT</FooterBrand>
-              <SocialLinks aria-label="social links">
-                <a href="https://github.com/3x-haust" target="_blank" rel="noreferrer">
-                  GitHub 3x-haust
-                </a>
-                <a href="https://www.instagram.com/3xhaust_" target="_blank" rel="noreferrer">
-                  Instagram 3xhaust_
-                </a>
-              </SocialLinks>
-            </FooterInner>
-          </Footer>
         </Stage>
 
         <AnimatePresence>
