@@ -27,7 +27,7 @@ export const exhibition = {
   year: '2026',
 } as const;
 
-export const works: Work[] = [
+const workEntries: Work[] = [
   {
     id: 'kim-taehwan',
     index: '01',
@@ -185,5 +185,17 @@ export const works: Work[] = [
     pdf: '/works/lee-seohyun.pdf',
   },
 ];
+
+export const works: Work[] = [
+  workEntries[1],
+  workEntries[2],
+  workEntries[3],
+  workEntries[4],
+  workEntries[5],
+  workEntries[0],
+].map((work, index) => ({
+  ...work,
+  index: String(index + 1).padStart(2, '0'),
+}));
 
 export const workCount = String(works.length).padStart(2, '0');

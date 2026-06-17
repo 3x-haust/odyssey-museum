@@ -18,34 +18,48 @@ const Backdrop = styled(motion.div)`
 
 const Panel = styled(motion.div)`
   position: relative;
-  width: min(1500px, 96vw);
-  margin: clamp(14px, 3vh, 40px) auto;
+  width: min(1180px, 94vw);
+  height: min(860px, 92vh);
+  margin: auto;
   background: ${({ theme }) => theme.color.paper};
   color: ${({ theme }) => theme.color.ink};
   display: grid;
-  grid-template-columns: minmax(320px, 4fr) 7fr;
+  grid-template-rows: minmax(260px, 54%) minmax(0, 46%);
   overflow: hidden;
   border: 1px solid ${({ theme }) => theme.color.ink};
-  max-height: calc(100vh - clamp(28px, 6vh, 80px));
 
   @media (max-width: 860px) {
-    grid-template-columns: 1fr;
-    max-height: calc(100vh - 28px);
+    width: min(94vw, 720px);
+    height: min(92vh, 820px);
+    grid-template-rows: minmax(220px, 44%) minmax(0, 56%);
   }
 `;
 
 const Aside = styled.div`
-  padding: clamp(24px, 3vw, 48px);
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid ${({ theme }) => theme.color.line};
+  padding: clamp(18px, 2.2vw, 34px);
+  display: grid;
+  grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.6fr);
+  gap: clamp(18px, 2.4vw, 34px);
+  border-top: 1px solid ${({ theme }) => theme.color.line};
   overflow-y: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   @media (max-width: 860px) {
-    border-right: none;
-    border-bottom: 1px solid ${({ theme }) => theme.color.line};
-    max-height: 44vh;
+    grid-template-columns: 1fr;
+    gap: 14px;
   }
+`;
+
+const Summary = styled.div`
+  min-width: 0;
+`;
+
+const Details = styled.div`
+  min-width: 0;
 `;
 
 const Meta = styled.div`
@@ -150,8 +164,7 @@ const OfficialName = styled.p`
 `;
 
 const ModalActions = styled.div`
-  margin-top: auto;
-  padding-top: 1.8rem;
+  padding-top: 1.2rem;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -263,7 +276,7 @@ const BigLaunch = styled.button`
 const Viewer = styled.div`
   position: relative;
   background: ${({ theme }) => theme.color.g700};
-  min-height: 300px;
+  min-height: 0;
 
   iframe {
     width: 100%;
@@ -272,7 +285,7 @@ const Viewer = styled.div`
   }
 
   @media (max-width: 860px) {
-    min-height: 52vh;
+    min-height: 0;
   }
 `;
 
@@ -334,58 +347,6 @@ export function WorkModal({ work, onClose, onLaunch }: Props) {
         exit={{ opacity: 0, y: 30, scale: 0.98 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
-        <Aside data-lenis-prevent>
-          <Meta>
-            <span>WORK {work.index}</span>
-            <span>{work.artist}</span>
-          </Meta>
-          <Title>{work.title}</Title>
-          <TitleEn>{work.titleEn}</TitleEn>
-
-          {work.officialTitle !== work.title && (
-            <OfficialName>작품명 — {work.officialTitle}</OfficialName>
-          )}
-
-          <Label>주제 / Theme</Label>
-          <Concept>{work.theme}</Concept>
-
-          <Label>콘셉트 / Concept</Label>
-          <Concept>{work.concept}</Concept>
-
-          <Label>중점 / Highlights</Label>
-          <List>
-            {work.highlights.map((h, i) => (
-              <ListItem key={i}>{h}</ListItem>
-            ))}
-          </List>
-
-          <Label>기술 / Stack</Label>
-          <TechRow>
-            {work.tech.map((t) => (
-              <TechChip key={t}>{t}</TechChip>
-            ))}
-          </TechRow>
-
-          <ModalActions>
-            {work.liveReady ? (
-              <LiveBtn onClick={() => onLaunch(work)} data-cursor="LAUNCH">
-                작품 실행 (LIVE) <span className="ic">▶</span>
-              </LiveBtn>
-            ) : (
-              <LiveBtn onClick={() => onLaunch(work)} data-cursor="OPEN">
-                작품 정보 보기 <span className="ic">→</span>
-              </LiveBtn>
-            )}
-            <LinkRow>
-              {work.pdf && (
-                <Open href={work.pdf} target="_blank" rel="noreferrer" data-cursor="PDF">
-                  원본 PDF <span className="a">↗</span>
-                </Open>
-              )}
-            </LinkRow>
-          </ModalActions>
-        </Aside>
-
         <Viewer>
           <Close onClick={onClose} aria-label="닫기" data-cursor="CLOSE">
             ✕
@@ -418,6 +379,62 @@ export function WorkModal({ work, onClose, onLaunch }: Props) {
             </LaunchPanel>
           )}
         </Viewer>
+
+        <Aside data-lenis-prevent>
+          <Summary>
+            <Meta>
+              <span>WORK {work.index}</span>
+              <span>{work.artist}</span>
+            </Meta>
+            <Title>{work.title}</Title>
+            <TitleEn>{work.titleEn}</TitleEn>
+
+            {work.officialTitle !== work.title && (
+              <OfficialName>작품명 — {work.officialTitle}</OfficialName>
+            )}
+
+            <Label>주제 / Theme</Label>
+            <Concept>{work.theme}</Concept>
+
+            <ModalActions>
+              {work.liveReady ? (
+                <LiveBtn onClick={() => onLaunch(work)} data-cursor="LAUNCH">
+                  웹 아트 실행 <span className="ic">▶</span>
+                </LiveBtn>
+              ) : (
+                <LiveBtn onClick={() => onLaunch(work)} data-cursor="OPEN">
+                  작품 정보 보기 <span className="ic">→</span>
+                </LiveBtn>
+              )}
+              <LinkRow>
+                {work.pdf && (
+                  <Open href={work.pdf} target="_blank" rel="noreferrer" data-cursor="PDF">
+                    기획안 PDF <span className="a">↗</span>
+                  </Open>
+                )}
+              </LinkRow>
+            </ModalActions>
+          </Summary>
+
+          <Details>
+            <Label>콘셉트 / Concept</Label>
+            <Concept>{work.concept}</Concept>
+
+            <Label>중점 / Highlights</Label>
+            <List>
+              {work.highlights.map((h, i) => (
+                <ListItem key={i}>{h}</ListItem>
+              ))}
+            </List>
+
+            <Label>기술 / Stack</Label>
+            <TechRow>
+              {work.tech.map((t) => (
+                <TechChip key={t}>{t}</TechChip>
+              ))}
+            </TechRow>
+          </Details>
+        </Aside>
       </Panel>
     </Backdrop>
   );

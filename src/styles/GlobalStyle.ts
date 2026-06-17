@@ -27,7 +27,11 @@ export const GlobalStyle = createGlobalStyle`
     --input-background: #f5f5f5;
   }
 
-  html { -webkit-text-size-adjust: 100%; }
+  html {
+    -webkit-text-size-adjust: 100%;
+    overflow: hidden;
+    scrollbar-width: none;
+  }
 
   /* Lenis smooth-scroll required styles */
   html.lenis, html.lenis body { height: auto; }
@@ -45,7 +49,8 @@ export const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    overflow-x: hidden;
+    overflow: hidden;
+    scrollbar-width: none;
   }
 
   a { color: inherit; text-decoration: none; }
@@ -71,20 +76,9 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: var(--background);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: var(--muted-foreground);
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--primary);
+    width: 0;
+    height: 0;
+    display: none;
   }
 
   ::selection {
