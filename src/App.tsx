@@ -244,6 +244,60 @@ const Action = styled.button<{ $primary?: boolean }>`
   }
 `;
 
+const Footer = styled.footer`
+  border-top: 1px solid var(--border, rgba(0, 0, 0, 0.16));
+`;
+
+const FooterInner = styled.div`
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 22px 16px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--muted-foreground, #666666);
+  font-size: 0.75rem;
+  line-height: 1.4;
+
+  @media (min-width: 640px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  @media (min-width: 1024px) {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  @media (max-width: 560px) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+`;
+
+const FooterBrand = styled.span`
+  color: var(--foreground, #111111);
+  font-weight: 600;
+`;
+
+const SocialLinks = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--foreground, #111111);
+  }
+`;
+
 export default function App() {
   const [infoWork, setInfoWork] = useState<Work | null>(null);
   const [liveWork, setLiveWork] = useState<Work | null>(null);
@@ -321,6 +375,20 @@ export default function App() {
             </Cards>
           </Container>
         </Main>
+
+        <Footer>
+          <FooterInner>
+            <FooterBrand>EX.IT</FooterBrand>
+            <SocialLinks aria-label="social links">
+              <a href="https://github.com/3x-haust" target="_blank" rel="noreferrer">
+                GitHub 3x-haust
+              </a>
+              <a href="https://www.instagram.com/3xhaust_" target="_blank" rel="noreferrer">
+                Instagram 3xhaust_
+              </a>
+            </SocialLinks>
+          </FooterInner>
+        </Footer>
 
         <AnimatePresence>
           {infoWork && (
