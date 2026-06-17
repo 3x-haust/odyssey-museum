@@ -147,9 +147,62 @@ interface Props {
   onClose: () => void;
 }
 
+function escapeHtml(value: string) {
+  return value.replace(/[&<>"']/g, (char) => {
+    switch (char) {
+      case '&':
+        return '&amp;';
+      case '<':
+        return '&lt;';
+      case '>':
+        return '&gt;';
+      case '"':
+        return '&quot;';
+      case "'":
+        return '&#39;';
+      default:
+        return char;
+    }
+  });
+}
+
+function createAppDocument(work: Work) {
+  const assetBase = `/apps/${work.appSlug}/assets`;
+  const title = escapeHtml(`${work.artist} - ${work.title}`);
+
+  return `<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <title>${title}</title>
+    <link rel="stylesheet" crossorigin href="${assetBase}/${work.appStyle}" />
+    <style>
+      html,
+      body,
+      #root {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        background: #000;
+      }
+      body {
+        overflow-x: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" crossorigin src="${assetBase}/${work.appScript}"></script>
+  </body>
+</html>`;
+}
+
 export function LiveStage({ work, onClose }: Props) {
   useScrollLock(true);
   const [loaded, setLoaded] = useState(false);
+  const appDocument = createAppDocument(work);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -182,7 +235,7 @@ export function LiveStage({ work, onClose }: Props) {
 
       <Frame>
         <iframe
-          src={`/apps/${work.appSlug}/index.html`}
+          srcDoc={appDocument}
           title={`${work.artist} — ${work.title}`}
           allow="autoplay; fullscreen; microphone; camera; xr-spatial-tracking; accelerometer; gyroscope"
           onLoad={() => setLoaded(true)}

@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"cd /tmp/puptest && sed 's#http://localhost:5186/#http://127.0.0.1:5186/#' shoot5.mjs > shoot5b.mjs && timeout 75 node shoot5b.mjs 2>&1 | tail -6; echo \\\"exit:${pipestatus[0]}\\\"; ls -la /tm...",
-  "error": "Exit code 1\n    at async Deferred.race (file:///private/tmp/puptest/node_modules/puppeteer-core/lib/esm/puppeteer/util/Deferred.js:33:20)\n    at async CdpFrame.goto (file:///private/tmp/puptest/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Frame.js:147:25)\n    at async CdpPage.goto (file:///private/tmp/puptest/node_modules/puppeteer-core/lib/esm/puppeteer/api/Page.js:570:20)\n    at async file:///private/tmp/puptest/shoot5b.mjs:8:1\n\nNode.js v24.11.0\nexit:\n(eval):1: no matches found: /tmp/v5_*...",
-  "timestamp": "2026-06-15T07:27:40.504Z",
-  "retry_count": 2
-}

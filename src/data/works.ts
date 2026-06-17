@@ -13,6 +13,8 @@ export interface Work {
   tags: string[];
   tech: string[];
   appSlug: string;
+  appScript: string;
+  appStyle: string;
   liveReady: boolean;
   pdf?: string;
 }
@@ -47,6 +49,8 @@ export const works: Work[] = [
     tags: ['Scroll Narrative', 'HAL 9000', 'Stargate', 'Rebirth'],
     tech: ['Exported Web App', 'Scroll-driven Sequence'],
     appSlug: 'kim-taehwan',
+    appScript: 'index-Cqz-iTit.js',
+    appStyle: 'index-BqZSfo3Y.css',
     liveReady: true,
     pdf: '/works/kim-taehwan.pdf',
   },
@@ -71,6 +75,8 @@ export const works: Work[] = [
     tags: ['WebGL', 'Three.js', '1:4:9', 'Bloom'],
     tech: ['Exported Web App', 'Three.js', 'EffectComposer'],
     appSlug: 'park-miju',
+    appScript: 'index-C4vNWHf6.js',
+    appStyle: 'index-DI4m5nj_.css',
     liveReady: true,
     pdf: '/works/park-miju.pdf',
   },
@@ -95,6 +101,8 @@ export const works: Work[] = [
     tags: ['Surveillance', 'Data Panel', 'System Log', 'Eye'],
     tech: ['Exported Web App', 'Generative UI'],
     appSlug: 'park-chaeyoon',
+    appScript: 'index-CO25g-Ii.js',
+    appStyle: 'index-BsyirMfF.css',
     liveReady: true,
     pdf: '/works/park-chaeyoon.pdf',
   },
@@ -119,6 +127,8 @@ export const works: Work[] = [
     tags: ['Audio Reactive', 'Wheel Tempo', 'Themes', 'HUD'],
     tech: ['Exported Web App', 'Web Audio', 'Canvas'],
     appSlug: 'jung-jiyoung',
+    appScript: 'index-CrGy56K8.js',
+    appStyle: 'index-Bn52Merl.css',
     liveReady: true,
     pdf: '/works/jung-jiyoung.pdf',
   },
@@ -143,6 +153,8 @@ export const works: Work[] = [
     tags: ['Mouse Tracking', 'Glitch', 'Easter Egg', 'HAL 9000'],
     tech: ['Exported Web App', 'Web Audio'],
     appSlug: 'jo-yechan',
+    appScript: 'index-DuCDJtnc.js',
+    appStyle: 'index-BjfYi25P.css',
     liveReady: true,
     pdf: '/works/jo-yechan.pdf',
   },
@@ -167,6 +179,8 @@ export const works: Work[] = [
     tags: ['R3F', 'InstancedMesh', 'Macro Zoom', 'Post FX'],
     tech: ['Exported Web App', 'React Three Fiber'],
     appSlug: 'lee-seohyun',
+    appScript: 'index-D7PL2rD8.js',
+    appStyle: 'index-wnElibMu.css',
     liveReady: true,
     pdf: '/works/lee-seohyun.pdf',
   },
