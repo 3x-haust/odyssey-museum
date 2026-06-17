@@ -23,7 +23,7 @@ const BackgroundVideo = styled.video`
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  filter: grayscale(1) contrast(1.04) brightness(0.72);
+  filter: grayscale(0.25) contrast(1.08) brightness(0.88);
 `;
 
 const BackdropTint = styled.div`
@@ -31,7 +31,12 @@ const BackdropTint = styled.div`
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: rgba(255, 255, 255, 0.74);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.46) 0%,
+    rgba(255, 255, 255, 0.26) 44%,
+    rgba(255, 255, 255, 0.34) 100%
+  );
 `;
 
 const Stage = styled.div`
@@ -95,10 +100,10 @@ const Container = styled.div`
   height: 100%;
   max-width: 100%;
   margin: 0 auto;
-  padding: clamp(18px, 2.8vw, 40px) clamp(18px, 3.2vw, 54px) clamp(14px, 2vw, 28px);
+  padding: clamp(16px, 2.1vw, 30px) clamp(18px, 2.4vw, 44px) clamp(14px, 1.5vw, 22px);
   display: grid;
   grid-template-rows: auto 1fr;
-  gap: clamp(14px, 2vw, 26px);
+  gap: clamp(12px, 1.45vw, 20px);
 `;
 
 const Hero = styled(motion.section)`
@@ -109,7 +114,7 @@ const HeroTitle = styled.p`
   max-width: 1024px;
   margin: 0 auto;
   color: var(--foreground, #111111);
-  font-size: clamp(1.35rem, 3.2vw, 3.05rem);
+  font-size: clamp(1.55rem, 3.45vw, 3.65rem);
   line-height: 1.18;
   word-break: keep-all;
 
@@ -133,7 +138,7 @@ const Cards = styled.div`
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: clamp(12px, 1.4vw, 20px);
+  gap: clamp(10px, 1vw, 16px);
   min-height: 0;
 
   @media (max-width: 760px) {
@@ -151,8 +156,8 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.86);
-  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(10px);
   border: 1px solid var(--border, rgba(0, 0, 0, 0.16));
   transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
 
@@ -165,7 +170,7 @@ const Card = styled.div`
 
 const CardBody = styled.div`
   min-height: 0;
-  padding: clamp(14px, 1.75vw, 24px);
+  padding: clamp(16px, 1.75vw, 30px);
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -174,11 +179,11 @@ const CardBody = styled.div`
 const PostTitle = styled.button`
   width: 100%;
   text-align: left;
-  margin-bottom: 10px;
+  margin-bottom: clamp(8px, 0.8vw, 14px);
   color: var(--foreground, #111111);
   font-family: ${({ theme }) => theme.font.kr};
-  font-size: clamp(1rem, 1.35vw, 1.35rem);
-  font-weight: 500;
+  font-size: clamp(1.12rem, 1.55vw, 1.7rem);
+  font-weight: 700;
   line-height: 1.35;
   word-break: keep-all;
   transition: color 0.3s ease;
@@ -189,16 +194,15 @@ const PostTitle = styled.button`
 `;
 
 const Excerpt = styled.p`
-  margin-bottom: 12px;
+  margin-bottom: clamp(18px, 2.3vw, 44px);
   color: var(--muted-foreground, #666666);
   font-family: ${({ theme }) => theme.font.kr};
-  font-size: clamp(0.72rem, 0.92vw, 0.92rem);
-  line-height: 1.55;
+  font-size: clamp(0.78rem, 1vw, 1.05rem);
+  line-height: 1.62;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  flex: 1;
   word-break: keep-all;
 `;
 
@@ -207,7 +211,7 @@ const Meta = styled.div`
   align-items: center;
   gap: 14px;
   color: var(--muted-foreground, #666666);
-  font-size: clamp(0.62rem, 0.78vw, 0.78rem);
+  font-size: clamp(0.68rem, 0.82vw, 0.86rem);
   line-height: 1.2;
   flex-wrap: wrap;
 `;
@@ -222,19 +226,18 @@ const Dot = styled.span`
 const Actions = styled.div`
   display: flex;
   gap: 8px;
-  margin-top: auto;
-  padding-top: 14px;
+  margin-top: clamp(12px, 1.4vw, 24px);
 `;
 
 const Action = styled.button<{ $primary?: boolean }>`
-  min-height: 34px;
-  padding: 0 clamp(10px, 1.1vw, 14px);
+  min-height: clamp(34px, 2.2vw, 42px);
+  padding: 0 clamp(12px, 1.15vw, 18px);
   border: 1px solid
     ${({ $primary }) =>
       $primary ? 'var(--primary, #111111)' : 'var(--border, rgba(0, 0, 0, 0.16))'};
   background: ${({ $primary }) => ($primary ? 'var(--primary, #111111)' : 'transparent')};
   color: ${({ $primary }) => ($primary ? 'var(--primary-foreground, #ffffff)' : 'inherit')};
-  font-size: clamp(0.72rem, 0.86vw, 0.88rem);
+  font-size: clamp(0.75rem, 0.88vw, 0.92rem);
   font-weight: 500;
   transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 
@@ -299,7 +302,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <Shell>
-        <BackgroundVideo src="/배경.mp4" autoPlay muted loop playsInline aria-hidden />
+        <BackgroundVideo src="/background.mp4" autoPlay muted loop playsInline aria-hidden />
         <BackdropTint />
 
         <Stage>
