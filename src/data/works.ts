@@ -21,7 +21,7 @@ export interface Work {
 
 export const exhibition = {
   title: 'ODYSSEY',
-  subtitle: '인터랙션 웹아트 6선',
+  subtitle: '인터랙션 웹 아트 6선',
   tagline: '2001: 스페이스 오디세이를 여섯 개의 시선으로 재해석하다',
   taglineEn: 'Six interactive readings of 2001: A Space Odyssey',
   year: '2026',
@@ -63,7 +63,7 @@ const workEntries: Work[] = [
     titleEn: 'Light Beyond the Boundary',
     officialTitle: '경계를 여는 빛',
     subtitle: '틀을 깨는 기하학적 붕괴와 성장',
-    theme: '모노리스와 기하학적인 붕괴를 통해 틀을 깨는 성장을 표현한 웹아트',
+    theme: '모노리스와 기하학적인 붕괴를 통해 틀을 깨는 성장을 표현한 웹 아트',
     concept:
       '진화의 순간마다 등장하는 비석, 모노리스를 중심 요소로 삼아 규칙적이던 기하학적 우주가 붕괴하는 과정을 그렸다. 진정한 성장을 이루려면 우리가 의존하던 도구와 틀을 스스로 깨고 나와야 한다는 메시지를 담았다.',
     highlights: [

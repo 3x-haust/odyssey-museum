@@ -285,7 +285,7 @@ export default function App() {
               <Hero initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <HeroTitle>
                   2001 스페이스 오디세이
-                  <span className="highlight">인터렉션 웹아트</span>
+                  <span className="highlight">인터랙션 웹 아트</span>
                 </HeroTitle>
               </Hero>
 
