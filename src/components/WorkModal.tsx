@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import type { Work } from '../data/works';
 import { useScrollLock } from '../hooks/useSmoothScroll';
+import { getPageCount } from '../lib/pdf';
+import { PdfCanvas } from './PdfCanvas';
 import { PlaceholderVisual } from './PlaceholderVisual';
 
 const Backdrop = styled(motion.div)`
@@ -23,18 +25,18 @@ const Panel = styled(motion.div)<{ $pdfFullscreen: boolean }>`
   margin: ${({ $pdfFullscreen }) => ($pdfFullscreen ? '0' : 'auto')};
   background: ${({ theme }) => theme.color.paper};
   color: ${({ theme }) => theme.color.ink};
-  display: grid;
-  grid-template-rows: ${({ $pdfFullscreen }) =>
-    $pdfFullscreen ? 'minmax(0, 1fr)' : 'minmax(560px, 76%) minmax(0, 24%)'};
-  overflow: hidden;
+  display: ${({ $pdfFullscreen }) => ($pdfFullscreen ? 'block' : 'grid')};
+  grid-template-rows: minmax(560px, 76%) minmax(0, 24%);
+  overflow-y: ${({ $pdfFullscreen }) => ($pdfFullscreen ? 'auto' : 'hidden')};
+  overflow-x: hidden;
   border: ${({ $pdfFullscreen, theme }) =>
     $pdfFullscreen ? '0' : `1px solid ${theme.color.ink}`};
+  scrollbar-width: ${({ $pdfFullscreen }) => ($pdfFullscreen ? 'thin' : 'none')};
 
   @media (max-width: 860px) {
     width: ${({ $pdfFullscreen }) => ($pdfFullscreen ? '100vw' : '96vw')};
     height: ${({ $pdfFullscreen }) => ($pdfFullscreen ? '100vh' : '94vh')};
-    grid-template-rows: ${({ $pdfFullscreen }) =>
-      $pdfFullscreen ? 'minmax(0, 1fr)' : 'minmax(440px, 72%) minmax(0, 28%)'};
+    grid-template-rows: minmax(440px, 72%) minmax(0, 28%);
   }
 `;
 
@@ -276,24 +278,29 @@ const BigLaunch = styled.button`
   }
 `;
 
-const Viewer = styled.div`
+const Viewer = styled.div<{ $pdfFullscreen: boolean }>`
   position: relative;
   background: ${({ theme }) => theme.color.paper};
   min-height: 0;
-
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
+  overflow: ${({ $pdfFullscreen }) => ($pdfFullscreen ? 'visible' : 'hidden')};
 
   @media (max-width: 860px) {
     min-height: 0;
   }
 `;
 
-const Close = styled.button`
-  position: absolute;
+const PdfOnlyScroll = styled.div`
+  width: 100%;
+  background: ${({ theme }) => theme.color.paper};
+`;
+
+const PdfPage = styled(PdfCanvas)`
+  width: 100%;
+  background: ${({ theme }) => theme.color.paper};
+`;
+
+const Close = styled.button<{ $pdfFullscreen: boolean }>`
+  position: ${({ $pdfFullscreen }) => ($pdfFullscreen ? 'fixed' : 'absolute')};
   top: 14px;
   right: 14px;
   z-index: 3;
@@ -319,6 +326,40 @@ interface Props {
   work: Work;
   onClose: () => void;
   onLaunch: (work: Work) => void;
+}
+
+function PdfOnlyDocument({ pdf }: { pdf: string }) {
+  const [pageCount, setPageCount] = useState(1);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    getPageCount(pdf)
+      .then((count) => {
+        if (!cancelled) setPageCount(count);
+      })
+      .catch(() => {
+        if (!cancelled) setPageCount(1);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [pdf]);
+
+  return (
+    <PdfOnlyScroll data-lenis-prevent>
+      {Array.from({ length: pageCount }, (_, index) => (
+        <PdfPage
+          key={`${pdf}-${index + 1}`}
+          url={pdf}
+          page={index + 1}
+          maxWidth={2400}
+          label=""
+        />
+      ))}
+    </PdfOnlyScroll>
+  );
 }
 
 export function WorkModal({ work, onClose, onLaunch }: Props) {
@@ -353,15 +394,17 @@ export function WorkModal({ work, onClose, onLaunch }: Props) {
         exit={{ opacity: 0, y: 30, scale: 0.98 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
-        <Viewer>
-          <Close onClick={onClose} aria-label="닫기" data-cursor="CLOSE">
+        <Viewer $pdfFullscreen={pdfFullscreen}>
+          <Close
+            $pdfFullscreen={pdfFullscreen}
+            onClick={onClose}
+            aria-label="닫기"
+            data-cursor="CLOSE"
+          >
             ✕
           </Close>
           {work.pdf ? (
-            <iframe
-              src={`${work.pdf}#zoom=page-width&toolbar=0&navpanes=0&scrollbar=1`}
-              title={`${work.artist} ${work.title} PDF`}
-            />
+            <PdfOnlyDocument pdf={work.pdf} />
           ) : (
             <LaunchPanel>
               <div className="frame">
@@ -386,63 +429,61 @@ export function WorkModal({ work, onClose, onLaunch }: Props) {
           )}
         </Viewer>
 
-        {!work.pdf && (
-          <Aside data-lenis-prevent>
-            <Summary>
-              <Meta>
-                <span>WORK {work.index}</span>
-                <span>{work.artist}</span>
-              </Meta>
-              <Title>{work.title}</Title>
-              <TitleEn>{work.titleEn}</TitleEn>
+        <Aside data-lenis-prevent>
+          <Summary>
+            <Meta>
+              <span>WORK {work.index}</span>
+              <span>{work.artist}</span>
+            </Meta>
+            <Title>{work.title}</Title>
+            <TitleEn>{work.titleEn}</TitleEn>
 
-              {work.officialTitle !== work.title && (
-                <OfficialName>작품명 — {work.officialTitle}</OfficialName>
+            {work.officialTitle !== work.title && (
+              <OfficialName>작품명 — {work.officialTitle}</OfficialName>
+            )}
+
+            <Label>주제 / Theme</Label>
+            <Concept>{work.theme}</Concept>
+
+            <ModalActions>
+              {work.liveReady ? (
+                <LiveBtn onClick={() => onLaunch(work)} data-cursor="LAUNCH">
+                  웹 아트 실행 <span className="ic">▶</span>
+                </LiveBtn>
+              ) : (
+                <LiveBtn onClick={() => onLaunch(work)} data-cursor="OPEN">
+                  작품 정보 보기 <span className="ic">→</span>
+                </LiveBtn>
               )}
-
-              <Label>주제 / Theme</Label>
-              <Concept>{work.theme}</Concept>
-
-              <ModalActions>
-                {work.liveReady ? (
-                  <LiveBtn onClick={() => onLaunch(work)} data-cursor="LAUNCH">
-                    웹 아트 실행 <span className="ic">▶</span>
-                  </LiveBtn>
-                ) : (
-                  <LiveBtn onClick={() => onLaunch(work)} data-cursor="OPEN">
-                    작품 정보 보기 <span className="ic">→</span>
-                  </LiveBtn>
+              <LinkRow>
+                {work.pdf && (
+                  <Open href={work.pdf} target="_blank" rel="noreferrer" data-cursor="PDF">
+                    기획안 PDF <span className="a">↗</span>
+                  </Open>
                 )}
-                <LinkRow>
-                  {work.pdf && (
-                    <Open href={work.pdf} target="_blank" rel="noreferrer" data-cursor="PDF">
-                      기획안 PDF <span className="a">↗</span>
-                    </Open>
-                  )}
-                </LinkRow>
-              </ModalActions>
-            </Summary>
+              </LinkRow>
+            </ModalActions>
+          </Summary>
 
-            <Details>
-              <Label>콘셉트 / Concept</Label>
-              <Concept>{work.concept}</Concept>
+          <Details>
+            <Label>콘셉트 / Concept</Label>
+            <Concept>{work.concept}</Concept>
 
-              <Label>중점 / Highlights</Label>
-              <List>
-                {work.highlights.map((h, i) => (
-                  <ListItem key={i}>{h}</ListItem>
-                ))}
-              </List>
+            <Label>중점 / Highlights</Label>
+            <List>
+              {work.highlights.map((h, i) => (
+                <ListItem key={i}>{h}</ListItem>
+              ))}
+            </List>
 
-              <Label>기술 / Stack</Label>
-              <TechRow>
-                {work.tech.map((t) => (
-                  <TechChip key={t}>{t}</TechChip>
-                ))}
-              </TechRow>
-            </Details>
-          </Aside>
-        )}
+            <Label>기술 / Stack</Label>
+            <TechRow>
+              {work.tech.map((t) => (
+                <TechChip key={t}>{t}</TechChip>
+              ))}
+            </TechRow>
+          </Details>
+        </Aside>
       </Panel>
     </Backdrop>
   );
