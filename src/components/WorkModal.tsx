@@ -41,10 +41,10 @@ const Panel = styled(motion.div)<{ $pdfFullscreen: boolean }>`
 `;
 
 const Aside = styled.div`
-  padding: clamp(14px, 1.5vw, 22px);
+  padding: clamp(22px, 2.4vw, 36px);
   display: grid;
   grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.6fr);
-  gap: clamp(14px, 1.8vw, 26px);
+  gap: clamp(24px, 3vw, 42px);
   border-top: 1px solid ${({ theme }) => theme.color.line};
   overflow-y: auto;
   scrollbar-width: none;
@@ -55,7 +55,7 @@ const Aside = styled.div`
 
   @media (max-width: 860px) {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 22px;
   }
 `;
 
@@ -71,17 +71,17 @@ const Meta = styled.div`
   display: flex;
   justify-content: space-between;
   font-family: ${({ theme }) => theme.font.mono};
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: ${({ theme }) => theme.color.g500};
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 `;
 
 const Title = styled.h3`
   font-family: ${({ theme }) => theme.font.kr};
   font-weight: 900;
-  font-size: clamp(1.25rem, 2vw, 2rem);
+  font-size: clamp(1.8rem, 2.8vw, 3rem);
   line-height: 1.08;
   letter-spacing: -0.03em;
 `;
@@ -89,28 +89,28 @@ const Title = styled.h3`
 const TitleEn = styled.span`
   display: block;
   font-family: ${({ theme }) => theme.font.mono};
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: ${({ theme }) => theme.color.g500};
-  margin: 0.35rem 0 0.8rem;
+  margin: 0.5rem 0 1.15rem;
 `;
 
 const Label = styled.h4`
   font-family: ${({ theme }) => theme.font.mono};
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: ${({ theme }) => theme.color.g500};
-  margin: 1rem 0 0.45rem;
+  margin: 1.25rem 0 0.65rem;
 `;
 
 const Concept = styled.p`
   font-family: ${({ theme }) => theme.font.kr};
   font-weight: 300;
-  font-size: 0.86rem;
-  line-height: 1.55;
+  font-size: 1.15rem;
+  line-height: 1.68;
   color: ${({ theme }) => theme.color.g900};
 `;
 
@@ -118,7 +118,7 @@ const List = styled.ul`
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.65rem;
 `;
 
 const ListItem = styled.li`
@@ -126,8 +126,8 @@ const ListItem = styled.li`
   padding-left: 1.4rem;
   font-family: ${({ theme }) => theme.font.kr};
   font-weight: 300;
-  font-size: 0.82rem;
-  line-height: 1.42;
+  font-size: 1.08rem;
+  line-height: 1.55;
   color: ${({ theme }) => theme.color.g700};
 
   &::before {
@@ -135,8 +135,8 @@ const ListItem = styled.li`
     position: absolute;
     left: 0;
     top: 0.6em;
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     background: ${({ theme }) => theme.color.ink};
   }
 `;
@@ -144,15 +144,15 @@ const ListItem = styled.li`
 const TechRow = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 `;
 
 const TechChip = styled.span`
   font-family: ${({ theme }) => theme.font.mono};
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 5px 10px;
+  padding: 7px 12px;
   background: ${({ theme }) => theme.color.ink};
   color: ${({ theme }) => theme.color.paper};
 `;
@@ -160,31 +160,31 @@ const TechChip = styled.span`
 const OfficialName = styled.p`
   font-family: ${({ theme }) => theme.font.kr};
   font-weight: 500;
-  font-size: 0.82rem;
-  line-height: 1.4;
+  font-size: 1.02rem;
+  line-height: 1.55;
   color: ${({ theme }) => theme.color.g700};
   padding-left: 12px;
   border-left: 2px solid ${({ theme }) => theme.color.ink};
-  margin-bottom: 0.8rem;
+  margin-bottom: 1rem;
 `;
 
 const ModalActions = styled.div`
-  padding-top: 0.7rem;
+  padding-top: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 `;
 
 const LiveBtn = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  height: 42px;
-  padding: 0 16px;
+  height: 50px;
+  padding: 0 18px;
   background: ${({ theme }) => theme.color.ink};
   color: ${({ theme }) => theme.color.paper};
   font-family: ${({ theme }) => theme.font.mono};
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   border-radius: 100px;
@@ -212,12 +212,12 @@ const Open = styled.a`
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  height: 40px;
-  padding: 0 16px;
+  height: 48px;
+  padding: 0 18px;
   border: 1px solid ${({ theme }) => theme.color.ink};
   border-radius: 100px;
   font-family: ${({ theme }) => theme.font.mono};
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   transition: background 0.3s, color 0.3s;
