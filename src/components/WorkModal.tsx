@@ -18,28 +18,28 @@ const Backdrop = styled(motion.div)`
 
 const Panel = styled(motion.div)`
   position: relative;
-  width: min(1180px, 94vw);
-  height: min(860px, 92vh);
+  width: min(1500px, 96vw);
+  height: min(980px, 94vh);
   margin: auto;
   background: ${({ theme }) => theme.color.paper};
   color: ${({ theme }) => theme.color.ink};
   display: grid;
-  grid-template-rows: minmax(260px, 54%) minmax(0, 46%);
+  grid-template-rows: minmax(560px, 76%) minmax(0, 24%);
   overflow: hidden;
   border: 1px solid ${({ theme }) => theme.color.ink};
 
   @media (max-width: 860px) {
-    width: min(94vw, 720px);
-    height: min(92vh, 820px);
-    grid-template-rows: minmax(220px, 44%) minmax(0, 56%);
+    width: 96vw;
+    height: 94vh;
+    grid-template-rows: minmax(440px, 72%) minmax(0, 28%);
   }
 `;
 
 const Aside = styled.div`
-  padding: clamp(18px, 2.2vw, 34px);
+  padding: clamp(14px, 1.5vw, 22px);
   display: grid;
   grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.6fr);
-  gap: clamp(18px, 2.4vw, 34px);
+  gap: clamp(14px, 1.8vw, 26px);
   border-top: 1px solid ${({ theme }) => theme.color.line};
   overflow-y: auto;
   scrollbar-width: none;
@@ -70,14 +70,14 @@ const Meta = styled.div`
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: ${({ theme }) => theme.color.g500};
-  margin-bottom: 1.4rem;
+  margin-bottom: 0.75rem;
 `;
 
 const Title = styled.h3`
   font-family: ${({ theme }) => theme.font.kr};
   font-weight: 900;
-  font-size: clamp(1.8rem, 3vw, 2.8rem);
-  line-height: 1;
+  font-size: clamp(1.25rem, 2vw, 2rem);
+  line-height: 1.08;
   letter-spacing: -0.03em;
 `;
 
@@ -88,7 +88,7 @@ const TitleEn = styled.span`
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: ${({ theme }) => theme.color.g500};
-  margin: 0.6rem 0 1.6rem;
+  margin: 0.35rem 0 0.8rem;
 `;
 
 const Label = styled.h4`
@@ -98,14 +98,14 @@ const Label = styled.h4`
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: ${({ theme }) => theme.color.g500};
-  margin: 1.8rem 0 0.7rem;
+  margin: 1rem 0 0.45rem;
 `;
 
 const Concept = styled.p`
   font-family: ${({ theme }) => theme.font.kr};
   font-weight: 300;
-  font-size: 0.96rem;
-  line-height: 1.75;
+  font-size: 0.86rem;
+  line-height: 1.55;
   color: ${({ theme }) => theme.color.g900};
 `;
 
@@ -113,7 +113,7 @@ const List = styled.ul`
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 0.4rem;
 `;
 
 const ListItem = styled.li`
@@ -121,8 +121,8 @@ const ListItem = styled.li`
   padding-left: 1.4rem;
   font-family: ${({ theme }) => theme.font.kr};
   font-weight: 300;
-  font-size: 0.9rem;
-  line-height: 1.55;
+  font-size: 0.82rem;
+  line-height: 1.42;
   color: ${({ theme }) => theme.color.g700};
 
   &::before {
@@ -155,16 +155,16 @@ const TechChip = styled.span`
 const OfficialName = styled.p`
   font-family: ${({ theme }) => theme.font.kr};
   font-weight: 500;
-  font-size: 0.92rem;
-  line-height: 1.5;
+  font-size: 0.82rem;
+  line-height: 1.4;
   color: ${({ theme }) => theme.color.g700};
   padding-left: 12px;
   border-left: 2px solid ${({ theme }) => theme.color.ink};
-  margin-bottom: 1.4rem;
+  margin-bottom: 0.8rem;
 `;
 
 const ModalActions = styled.div`
-  padding-top: 1.2rem;
+  padding-top: 0.7rem;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -174,8 +174,8 @@ const LiveBtn = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  height: 50px;
-  padding: 0 20px;
+  height: 42px;
+  padding: 0 16px;
   background: ${({ theme }) => theme.color.ink};
   color: ${({ theme }) => theme.color.paper};
   font-family: ${({ theme }) => theme.font.mono};
@@ -207,8 +207,8 @@ const Open = styled.a`
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  height: 46px;
-  padding: 0 18px;
+  height: 40px;
+  padding: 0 16px;
   border: 1px solid ${({ theme }) => theme.color.ink};
   border-radius: 100px;
   font-family: ${({ theme }) => theme.font.mono};
@@ -353,7 +353,7 @@ export function WorkModal({ work, onClose, onLaunch }: Props) {
           </Close>
           {work.pdf ? (
             <iframe
-              src={`${work.pdf}#view=FitH&toolbar=1`}
+              src={`${work.pdf}#view=FitH&zoom=page-width&toolbar=1`}
               title={`${work.artist} ${work.title} PDF`}
             />
           ) : (
