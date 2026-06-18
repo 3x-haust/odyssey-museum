@@ -16,22 +16,25 @@ const Backdrop = styled(motion.div)`
   justify-content: center;
 `;
 
-const Panel = styled(motion.div)`
+const Panel = styled(motion.div)<{ $pdfFullscreen: boolean }>`
   position: relative;
-  width: min(1500px, 96vw);
-  height: min(980px, 94vh);
-  margin: auto;
+  width: ${({ $pdfFullscreen }) => ($pdfFullscreen ? '100vw' : 'min(1500px, 96vw)')};
+  height: ${({ $pdfFullscreen }) => ($pdfFullscreen ? '100vh' : 'min(980px, 94vh)')};
+  margin: ${({ $pdfFullscreen }) => ($pdfFullscreen ? '0' : 'auto')};
   background: ${({ theme }) => theme.color.paper};
   color: ${({ theme }) => theme.color.ink};
   display: grid;
-  grid-template-rows: minmax(560px, 76%) minmax(0, 24%);
+  grid-template-rows: ${({ $pdfFullscreen }) =>
+    $pdfFullscreen ? 'minmax(0, 1fr)' : 'minmax(560px, 76%) minmax(0, 24%)'};
   overflow: hidden;
-  border: 1px solid ${({ theme }) => theme.color.ink};
+  border: ${({ $pdfFullscreen, theme }) =>
+    $pdfFullscreen ? '0' : `1px solid ${theme.color.ink}`};
 
   @media (max-width: 860px) {
-    width: 96vw;
-    height: 94vh;
-    grid-template-rows: minmax(440px, 72%) minmax(0, 28%);
+    width: ${({ $pdfFullscreen }) => ($pdfFullscreen ? '100vw' : '96vw')};
+    height: ${({ $pdfFullscreen }) => ($pdfFullscreen ? '100vh' : '94vh')};
+    grid-template-rows: ${({ $pdfFullscreen }) =>
+      $pdfFullscreen ? 'minmax(0, 1fr)' : 'minmax(440px, 72%) minmax(0, 28%)'};
   }
 `;
 
@@ -275,7 +278,7 @@ const BigLaunch = styled.button`
 
 const Viewer = styled.div`
   position: relative;
-  background: ${({ theme }) => theme.color.g700};
+  background: ${({ theme }) => theme.color.paper};
   min-height: 0;
 
   iframe {
@@ -329,6 +332,8 @@ export function WorkModal({ work, onClose, onLaunch }: Props) {
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
+  const pdfFullscreen = Boolean(work.pdf);
+
   return (
     <Backdrop
       onClick={onClose}
@@ -338,6 +343,7 @@ export function WorkModal({ work, onClose, onLaunch }: Props) {
       transition={{ duration: 0.4 }}
     >
       <Panel
+        $pdfFullscreen={pdfFullscreen}
         role="dialog"
         aria-modal="true"
         aria-label={`${work.artist} — ${work.title}`}
@@ -353,7 +359,7 @@ export function WorkModal({ work, onClose, onLaunch }: Props) {
           </Close>
           {work.pdf ? (
             <iframe
-              src={`${work.pdf}#view=FitH&zoom=page-width&toolbar=1`}
+              src={`${work.pdf}#zoom=page-width&toolbar=0&navpanes=0&scrollbar=1`}
               title={`${work.artist} ${work.title} PDF`}
             />
           ) : (
@@ -380,61 +386,63 @@ export function WorkModal({ work, onClose, onLaunch }: Props) {
           )}
         </Viewer>
 
-        <Aside data-lenis-prevent>
-          <Summary>
-            <Meta>
-              <span>WORK {work.index}</span>
-              <span>{work.artist}</span>
-            </Meta>
-            <Title>{work.title}</Title>
-            <TitleEn>{work.titleEn}</TitleEn>
+        {!work.pdf && (
+          <Aside data-lenis-prevent>
+            <Summary>
+              <Meta>
+                <span>WORK {work.index}</span>
+                <span>{work.artist}</span>
+              </Meta>
+              <Title>{work.title}</Title>
+              <TitleEn>{work.titleEn}</TitleEn>
 
-            {work.officialTitle !== work.title && (
-              <OfficialName>작품명 — {work.officialTitle}</OfficialName>
-            )}
-
-            <Label>주제 / Theme</Label>
-            <Concept>{work.theme}</Concept>
-
-            <ModalActions>
-              {work.liveReady ? (
-                <LiveBtn onClick={() => onLaunch(work)} data-cursor="LAUNCH">
-                  웹 아트 실행 <span className="ic">▶</span>
-                </LiveBtn>
-              ) : (
-                <LiveBtn onClick={() => onLaunch(work)} data-cursor="OPEN">
-                  작품 정보 보기 <span className="ic">→</span>
-                </LiveBtn>
+              {work.officialTitle !== work.title && (
+                <OfficialName>작품명 — {work.officialTitle}</OfficialName>
               )}
-              <LinkRow>
-                {work.pdf && (
-                  <Open href={work.pdf} target="_blank" rel="noreferrer" data-cursor="PDF">
-                    기획안 PDF <span className="a">↗</span>
-                  </Open>
+
+              <Label>주제 / Theme</Label>
+              <Concept>{work.theme}</Concept>
+
+              <ModalActions>
+                {work.liveReady ? (
+                  <LiveBtn onClick={() => onLaunch(work)} data-cursor="LAUNCH">
+                    웹 아트 실행 <span className="ic">▶</span>
+                  </LiveBtn>
+                ) : (
+                  <LiveBtn onClick={() => onLaunch(work)} data-cursor="OPEN">
+                    작품 정보 보기 <span className="ic">→</span>
+                  </LiveBtn>
                 )}
-              </LinkRow>
-            </ModalActions>
-          </Summary>
+                <LinkRow>
+                  {work.pdf && (
+                    <Open href={work.pdf} target="_blank" rel="noreferrer" data-cursor="PDF">
+                      기획안 PDF <span className="a">↗</span>
+                    </Open>
+                  )}
+                </LinkRow>
+              </ModalActions>
+            </Summary>
 
-          <Details>
-            <Label>콘셉트 / Concept</Label>
-            <Concept>{work.concept}</Concept>
+            <Details>
+              <Label>콘셉트 / Concept</Label>
+              <Concept>{work.concept}</Concept>
 
-            <Label>중점 / Highlights</Label>
-            <List>
-              {work.highlights.map((h, i) => (
-                <ListItem key={i}>{h}</ListItem>
-              ))}
-            </List>
+              <Label>중점 / Highlights</Label>
+              <List>
+                {work.highlights.map((h, i) => (
+                  <ListItem key={i}>{h}</ListItem>
+                ))}
+              </List>
 
-            <Label>기술 / Stack</Label>
-            <TechRow>
-              {work.tech.map((t) => (
-                <TechChip key={t}>{t}</TechChip>
-              ))}
-            </TechRow>
-          </Details>
-        </Aside>
+              <Label>기술 / Stack</Label>
+              <TechRow>
+                {work.tech.map((t) => (
+                  <TechChip key={t}>{t}</TechChip>
+                ))}
+              </TechRow>
+            </Details>
+          </Aside>
+        )}
       </Panel>
     </Backdrop>
   );
