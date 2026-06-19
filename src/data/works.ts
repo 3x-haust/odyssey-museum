@@ -127,7 +127,7 @@ const workEntries: Work[] = [
     tags: ['Audio Reactive', 'Wheel Tempo', 'Themes', 'HUD'],
     tech: ['Exported Web App', 'Web Audio', 'Canvas'],
     appSlug: 'jung-jiyoung',
-    appScript: 'index-CrGy56K8.js',
+    appScript: 'index-CHaj05BW.js',
     appStyle: 'index-Bn52Merl.css',
     liveReady: true,
     pdf: '/works/jung-jiyoung.pdf',
